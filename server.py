@@ -25,11 +25,6 @@ def main():
 	httpSrvThread.start()
 
 
-	''' logging '''
-	mqttCltObj._log.setLevel(logging.INFO)
-	httpSrvObj._log.setLevel(logging.INFO)
-
-
 	''' Load startup.json '''
 	file = os.path.realpath(os.path.dirname(__file__) + '/startup.json')
 	if os.path.exists(file):
