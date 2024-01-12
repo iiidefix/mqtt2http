@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import logging, uuid as uuidGen
 import requests
+from multiprocessing import Process
 import sys, os
 
 class mqttClt:
@@ -52,8 +53,12 @@ class mqttClt:
 		for uuid in self._subscriptions:
 			hook = self._subscriptions[uuid]
 			if hook["topic"] == message.topic:
-				r = requests.request(method=hook["method"], url=hook["url"], data=message.payload)
-				self._log.info("Request: %s %d %s", uuid, r.status_code, r.request.url)
+				p = Process(target=self._request, args=[uuid, hook["method"], hook["url"], message])
+				p.start()
+
+	def _request(self, uuid, method, url, message):
+		r = requests.request(method, url, data=message.payload)
+		self._log.info("Request: %s %d %s", uuid, r.status_code, r.request.url)
 
 
 
