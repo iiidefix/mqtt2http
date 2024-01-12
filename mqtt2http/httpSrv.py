@@ -8,18 +8,17 @@ class httpSrv:
 	def __init__(self, host, port, mqttClient):
 		self._log = logging.getLogger(__name__)
 
-		self.port = port
 		self.host = host
+		self.port = port
 
-		self.__reqHandle = handlerFunc(mqttClient)
 		if ":" in host:
-			self._httpd = HTTPServerV6((host, port), self.__reqHandle)
+			self._httpd = HTTPServerV6((host, port), handlerFunc(mqttClient))
 		else:
-			self._httpd = HTTPServer((host, port), self.__reqHandle)
+			self._httpd = HTTPServer((host, port), handlerFunc(mqttClient))
 
 
 	def start(self):
-		self._log.warning("Start HTTP server on %s:%s",self.host,self.port)
+		self._log.warning("Start HTTP server on %s:%s", self.host, self.port)
 		self._httpd.serve_forever()
 
 	def cleanup(self):
@@ -40,23 +39,17 @@ def handlerFunc(mqttClient):
 			qs = {}
 			path = self.path
 			if '?' in path:
-				path, tmp = path.split('?', 1)
-				qs = parse_qs(tmp)
-				for p in qs:
-					qs[p] = qs[p][0]
+				path, query = path.split('?', 1)
+				qs = {k: v[0] for k, v in parse_qs(query).items()}
 
-			pathArray = []
-			for data in path.split("/"):
-				if data:
-					pathArray.append(data)
+			action = path.lstrip("/").split("/", 1)[0]
 
-
-			if len(pathArray) == 0:
+			if not action:
 				self.path = '../README.md'
 				return SimpleHTTPRequestHandler.do_GET(self)
 
-			if pathArray[0] in self.__actions:
-				self._actions(pathArray[0], qs)
+			if action in self.__actions:
+				self._actions(action, qs)
 				return
 
 			else:
@@ -73,32 +66,25 @@ def handlerFunc(mqttClient):
 			qs = {}
 			path = self.path
 			if '?' in path:
-				path, tmp = path.split('?', 1)
-				qs = parse_qs(tmp)
-				for p in qs:
-					qs[p] = qs[p][0]
+				path, query = path.split('?', 1)
+				qs = {k: v[0] for k, v in parse_qs(query).items()}
 
-			pathArray = []
-			for data in path.split("/"):
-				if data:
-					pathArray.append(data)
+			action = path.lstrip("/").split("/", 1)[0]
 
-			if len(pathArray) == 0:
+			if not action:
 				self._log.error("POST Path missing")
 				self._send_error(500, '{"status":"endpoint_missing"}')
 				return
 
-			if len(body) == 0:
-				body = "{}"
 			try:
-				json_content = json.loads(body)
+				json_body = json.loads(body if body else "{}")
 			except:
 				self._log.error("Json data invalid")
 				self._send_error(500, '{"status":"json_data_invalid"}')
 				return
 
-			if pathArray[0] in self.__actions:
-				self._actions(pathArray[0], json_content | qs)
+			if action in self.__actions:
+				self._actions(action, json_body | qs)
 				return
 
 			else:

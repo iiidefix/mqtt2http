@@ -25,9 +25,13 @@ def main():
 	httpSrvThread.start()
 
 
+	''' logging '''
+	mqttCltObj._log.setLevel(logging.INFO)
+	httpSrvObj._log.setLevel(logging.INFO)
+
+
 	''' Load startup.json '''
-	dir_path = os.path.dirname(__file__)
-	file = os.path.realpath(dir_path + '/startup.json')
+	file = os.path.realpath(os.path.dirname(__file__) + '/startup.json')
 	if os.path.exists(file):
 		try:
 			f = open(file)
@@ -39,7 +43,7 @@ def main():
 
 		for uuid in d:
 			hook = d[uuid]
-			if "topic" in hook and "qos" in hook and "url" in hook and "method" in hook:
+			if all(key in hook for key in ["topic", "qos", "url", "method"]):
 				mqttCltObj.subscribeWebhook(hook["topic"], hook["url"], hook["qos"], hook["method"])
 
 
