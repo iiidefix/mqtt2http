@@ -1,0 +1,10 @@
+__pycache__/
+vEnv/
+build/
+dist/
+*.egg-info/
+*.eggs
+.vscode/
+*~lock*
+.idea/
+startup.json
