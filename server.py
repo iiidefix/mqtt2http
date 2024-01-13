@@ -39,7 +39,7 @@ def main():
 		for uuid in d:
 			hook = d[uuid]
 			if all(key in hook for key in ["topic", "qos", "url", "method"]):
-				mqttCltObj.subscribeWebhook(hook["topic"], hook["url"], hook["qos"], hook["method"])
+				mqttCltObj.subscribeWebhook(hook["topic"], hook["url"], hook["qos"], hook["method"], uuid)
 
 
 
