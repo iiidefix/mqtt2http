@@ -45,7 +45,7 @@ def handlerFunc(mqttClient):
 			action = path.lstrip("/").split("/", 1)[0]
 
 			if not action:
-				self.path = '../README.md'
+				self.path = '../index.html'
 				return SimpleHTTPRequestHandler.do_GET(self)
 
 			if action in self.__actions:
