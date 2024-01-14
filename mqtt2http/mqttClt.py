@@ -100,3 +100,6 @@ class mqttClt:
 			del self._subscriptions[uuid]
 		else:
 			self._log.warn("uuid not in webhook subscriptions. %s", uuid)
+
+	def listSubsriptions(self):
+		return {k: {k2: v for k2, v in d.items() if k2 in ["topic", "qos", "url", "method"]} for k, d in self._subscriptions.items()}

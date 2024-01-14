@@ -146,7 +146,7 @@ def handlerFunc(mqttClient):
 
 		def _actions(self, action, data):
 			if action == "list":
-				self._send_json(json.dumps({k: {k2: v for k2, v in d.items() if k2 != 'regex'} for k, d in mqttClient._subscriptions.items()}))
+				self._send_json(json.dumps(mqttClient.listSubsriptions()))
 
 			elif action == "subscribe":
 				if 'topic' in data and 'url' in data:
