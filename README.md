@@ -23,6 +23,8 @@ environment variables with default values:
 - http-server:
 	- `HTTP_BIND`="::"
 	- `HTTP_PORT`=8080
+- logging
+	- `LOG_LEVEL`=WARNING
 
 
 
