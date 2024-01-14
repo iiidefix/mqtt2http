@@ -14,6 +14,13 @@ def main():
 	HTTP_BIND = os.environ.get('HTTP_BIND', '127.0.0.1')
 	HTTP_PORT = int(os.environ.get('HTTP_PORT', 8080))
 
+	# Logging Configuration
+	LOG_LEVEL = os.environ.get('LOG_LEVEL', 'WARNING').upper()
+
+
+	''' Set global log level '''
+	logging.basicConfig(level=getattr(logging, LOG_LEVEL, "WARNING"))
+
 
 	''' Start mqtt client '''
 	mqttCltObj = mqttClt(MQTT_HOST, port=MQTT_PORT, username=MQTT_USER, password=MQTT_PASS)

@@ -12,6 +12,7 @@ Environment="MQTT_USER="
 Environment="MQTT_PASS="
 Environment="HTTP_BIND=127.0.0.1"
 Environment="HTTP_PORT=8080"
+Environment="LOG_LEVEL=WARNING"
 WorkingDirectory=/{path}/
 ExecStart=/{path}/vEnv/bin/python ./server.py
 Restart=always
