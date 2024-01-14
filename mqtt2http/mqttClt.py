@@ -1,5 +1,6 @@
 import paho.mqtt.client as mqtt
 import logging, uuid as uuidGen
+import re
 import requests
 from multiprocessing import Process
 import sys, os
@@ -50,11 +51,16 @@ class mqttClt:
 
 	def on_message(self, client, userdata, message):
 		''' on_message callback '''
+		self._log.info("message for %s", message.topic)
 		for uuid in self._subscriptions:
 			hook = self._subscriptions[uuid]
 			if hook["topic"] == message.topic:
 				p = Process(target=self._request, args=[uuid, hook["method"], hook["url"], message])
 				p.start()
+			elif hook['regex'] is not None:
+				if hook['regex'].match(message.topic):
+					p = Process(target=self._request, args=[uuid, hook["method"], hook["url"].replace('%topic%', message.topic), message])
+					p.start()
 
 	def _request(self, uuid, method, url, message):
 		r = requests.request(method, url, data=message.payload)
@@ -80,7 +86,8 @@ class mqttClt:
 				"topic" : topic,
 				"qos": qos,
 				"url" : url,
-				"method" : method
+				"method" : method,
+				"regex" : re.compile("(?s:" + topic.replace("#", ".*").replace("+", "[^/]+") + ")\\Z") if any((c in set('#+')) for c in topic) else None
 			}
 			self._mqtt.subscribe(topic, qos)
 			return uuid

@@ -146,37 +146,31 @@ def handlerFunc(mqttClient):
 
 		def _actions(self, action, data):
 			if action == "list":
-				self._send_json(json.dumps(mqttClient._subscriptions))
-				return
+				dx = new_dict = {k: {k2: v for k2, v in d.items() if k2 != 'regex'} for k, d in mqttClient._subscriptions.items()}
+				self._send_json(json.dumps(dx))
 
 			elif action == "subscribe":
 				if 'topic' in data and 'url' in data:
 					data = {"qos":0, "method": "POST"} | data
 					uuid = mqttClient.subscribeWebhook(data["topic"], data["url"], data["qos"], data["method"])
 					self._send_json(f'{{"status":"ok","uuid":"{uuid}"}}')
-					return
 				else:
 					self._send_error(500, '{"status":"data-missing"}')
-					return
 
 			elif action == "unsubscribe":
 				if 'uuid' in data:
 					mqttClient.unsubscribeWebhook(data["uuid"])
 					self._send_json('{"status":"ok"}')
-					return
 				else:
 					self._send_error(500, '{"status":"data-missing"}')
-					return
 
 			elif action == "publish":
 				if "topic" in data and "data" in data:
 					self._log.info("Publish: %s <=> '%s'", data["topic"], data["data"])
 					mqttClient.publish(data["topic"], data["data"])
 					self._send_json('{"status":"ok"}')
-					pass
 				else:
 					self._log.error("POST publish data missing")
 					self._send_error(500, '{"status":"data-missing"}')
-					return
 
 	return reqHandler
