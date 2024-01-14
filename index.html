@@ -10,12 +10,56 @@
 	<meta name="theme-color" content="#00c7fc">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	<style type="text/css">
+		.bi {
+			fill: currentColor;
+		}
+
 		td > input {
 			width: 100%;
 		}
 
-		.bi {
-			fill: currentColor;
+		@media only screen and (max-width: 992px) {
+			table, table * {
+				display: block;
+			}
+
+			table tr {
+				margin-bottom: 1em;
+			}
+			table thead th:not(:last-of-type) {
+				display: none;
+			}
+			table thead th:last-of-type {
+				display: block;
+			}
+			table :matches(th, td) {
+				padding-left: 2em !important;
+			}
+			table :matches(th, td)::before {
+				display: block;
+				margin-left: -2em;
+			}
+			table :matches(tbody, tfoot) td:nth-child(1)::before {
+				content: "uuid:";
+			}
+			table :matches(tbody, tfoot) td:nth-child(2)::before {
+				content: "topic:";
+			}
+			table :matches(tbody, tfoot) td:nth-child(3)::before {
+				content: "qos:";
+			}
+			table :matches(tbody, tfoot) td:nth-child(4)::before {
+				content: "url:";
+			}
+			table :matches(tbody, tfoot) td:nth-child(5)::before {
+				content: "method:";
+			}
+			table tfoot td:first-child {
+				display: none;
+			}
+			table .btn * {
+				display: inline;
+			}
 		}
 	</style>
 </head>
@@ -48,7 +92,7 @@
 			<td>
 				<button type="button" value="{uuid|}" class="btn btn-danger btn-sm">
 					<svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#delete"></use></svg>
-					<span class="visually-hidden">Delete</span>
+					<span class="d-lg-none">Delete</span>
 				</button>
 			</td>
 		</tr>
@@ -67,7 +111,7 @@
 					<th>
 						<button type="button" id="refresh" class="btn btn-success btn-sm">
 							<svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#reload"></use></svg>
-							<span class="visually-hidden">Refresh</span>
+							<span class="d-lg-none">Refresh</span>
 						</button>
 					</th>
 				</tr>
@@ -82,7 +126,7 @@
 				<td>
 					<button type="button" data-action="add" value="" class="btn btn-primary btn-sm">
 						<svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#add"></use></svg>
-						<span class="visually-hidden">Add</span>
+						<span class="d-lg-none">Add</span>
 					</button>
 				</td>
 			</tfoot>
