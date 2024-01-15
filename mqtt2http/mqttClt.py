@@ -55,15 +55,16 @@ class mqttClt:
 		for uuid in self._subscriptions:
 			hook = self._subscriptions[uuid]
 			if hook["topic"] == message.topic:
-				p = Process(target=self._request, args=[uuid, hook["method"], hook["url"], message])
-				p.start()
-			elif hook['regex'] is not None:
-				if hook['regex'].match(message.topic):
-					p = Process(target=self._request, args=[uuid, hook["method"], hook["url"].replace('%topic%', message.topic), message])
-					p.start()
+				pass
+			elif hook['regex'] is not None and hook['regex'].match(message.topic):
+				pass
+			else:
+				continue
+			p = Process(target=self._request, args=[uuid, hook["method"], hook["url"], message])
+			p.start()
 
 	def _request(self, uuid, method, url, message):
-		r = requests.request(method, url, data=message.payload)
+		r = requests.request(method, url.replace('%topic%', message.topic), data=message.payload)
 		self._log.info("Request: %s %d %s", uuid, r.status_code, r.request.url)
 
 
