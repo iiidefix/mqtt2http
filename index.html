@@ -135,15 +135,30 @@
 	<form method="get" action="#" class="mt-5">
 		<h2>publish message</h2>
 		<div class="row mb-3">
-			<label for="inputTopic" class="col-sm-2 col-form-label">Topic</label>
+			<label for="inputTopic" class="col-sm-2 col-form-label">topic</label>
 			<div class="col-sm-10">
 				<input type="text" name="topic" class="form-control" id="inputTopic" />
 			</div>
 		</div>
 		<div class="row mb-3">
-			<label for="inputMessage" class="col-sm-2 col-form-label">Message</label>
+			<label for="inputMessage" class="col-sm-2 col-form-label">message</label>
 			<div class="col-sm-10">
 				<textarea name="message" class="form-control" id="inputMessage"></textarea>
+			</div>
+		</div>
+		<div class="row mb-3">
+			<label for="inputQos" class="col-sm-2 col-form-label">qos</label>
+			<div class="col-sm-10">
+				<input type="number" name="qos" class="form-control" id="inputQos" value="0" min="0" max="2" step="1" />
+			</div>
+		</div>
+		<div class="row mb-3">
+			<label for="inputRetain" class="col-sm-2 col-form-label">retain</label>
+			<div class="col-sm-10">
+				<div class="form-check form-switch pt-2">
+					<input class="form-check-input" type="checkbox" role="switch" name="retain" id="inputRetain" value="true" />
+				  </div>
+
 			</div>
 		</div>
 

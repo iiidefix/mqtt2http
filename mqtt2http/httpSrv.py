@@ -150,7 +150,7 @@ def handlerFunc(mqttClient):
 
 			elif action == "subscribe":
 				if 'topic' in data and 'url' in data:
-					data = {"qos":0, "method": "POST"} | data
+					data = {"qos": 0, "method": "POST"} | data
 					uuid = mqttClient.subscribeWebhook(data["topic"], data["url"], data["qos"], data["method"])
 					self._send_json(f'{{"status":"ok","uuid":"{uuid}"}}')
 				else:
@@ -166,7 +166,7 @@ def handlerFunc(mqttClient):
 			elif action == "publish":
 				if "topic" in data and "data" in data:
 					self._log.info("Publish: %s <=> '%s'", data["topic"], data["data"])
-					mqttClient.publish(data["topic"], data["data"])
+					mqttClient.publish(data["topic"], data["data"], int(data['qos']) if 'key' in data else 0, bool(data['retain']) if 'retain' in data else False)
 					self._send_json('{"status":"ok"}')
 				else:
 					self._log.error("POST publish data missing")
