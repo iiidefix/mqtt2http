@@ -93,7 +93,6 @@ def handlerFunc(mqttClient):
 
 		def do_PUT(self):
 			self._log = logging.getLogger(__name__)
-			self._log.setLevel(logging.INFO)
 
 			topic = self.path.strip("/")
 			content_len = int(self.headers.get('Content-Length'))
