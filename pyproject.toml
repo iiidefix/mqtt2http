@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mqtt2http"
 authors = [
-    { name = "iiidefix", email = "iiidefix@gmail.com" },
+    { name = "iiidefix", email = "iiidefix+mqtt2http@gmail.com" },
 ]
 description = "A simple MQTT to HTTP bridge"
 readme = "README.md"

@@ -9,7 +9,7 @@ class mqttClt:
 	def __init__(self, host, port = 1883, username = "", password = "", tls_cert= "", tls_ver="", tls_insecure=True, keepalive = 5):
 		self._log = logging.getLogger(__name__)
 
-		self._mqtt = mqtt.Client()
+		self._mqtt = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, "mqtt2http")
 
 		if username:
 			self._mqtt.username_pw_set(username=username, password=password)
